@@ -1,0 +1,4 @@
+.cursor-better {
+  cursor: none !important;
+  user-select: none;
+}
