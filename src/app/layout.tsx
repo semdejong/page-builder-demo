@@ -3,6 +3,7 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import "./globals.css";
 import { ComponentsProvider } from "./context/ComponentsContext";
+import { EditorProvider } from "./context/EditorContext";
 
 // export const metadata = {
 //   title: "Page builder demo",
@@ -19,7 +20,9 @@ export default function RootLayout({
       <head />
       <body>
         <ChakraProvider>
-          <ComponentsProvider>{children}</ComponentsProvider>
+          <ComponentsProvider>
+            <EditorProvider>{children}</EditorProvider>
+          </ComponentsProvider>
         </ChakraProvider>
       </body>
     </html>

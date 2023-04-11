@@ -67,25 +67,25 @@ export default function useBuilder() {
       let hasYSnapped = false;
 
       components?.forEach((component: any) => {
-        if (component.x - x < 15 && component.x - x > -15) {
+        if (component.x - x < 10 && component.x - x > -10) {
           x = component.x;
           setXAlignLine(component.x);
           hasXSnapped = true;
         }
-        if (component.y - y < 15 && component.y - y > -15) {
+        if (component.y - y < 10 && component.y - y > -10) {
           y = component.y;
           setYAlignLine(component.y);
           hasYSnapped = true;
         }
       });
 
-      if (containerMiddleX - x < 15 && containerMiddleX - x > -15) {
+      if (containerMiddleX - x < 10 && containerMiddleX - x > -10) {
         x = containerMiddleX - widthOfComponent / 2;
         setXAlignLine(containerMiddleX);
         hasXSnapped = true;
       }
 
-      if (containerMiddleY - y < 15 && containerMiddleY - y > -15) {
+      if (containerMiddleY - y < 10 && containerMiddleY - y > -10) {
         y = containerMiddleY - heightOfComponent / 2;
         setYAlignLine(containerMiddleY);
         hasYSnapped = true;
@@ -101,8 +101,20 @@ export default function useBuilder() {
       setDraggingComponent({
         type: item.type,
         id: replace?.id || Math.random(),
-        x: x,
-        y: y,
+        x: hasXSnapped
+          ? x
+          : x -
+            (widthOfComponent ||
+              getComponentDefaultData(item.type)?.width ||
+              100) /
+              2,
+        y: hasYSnapped
+          ? y
+          : y -
+            (heightOfComponent ||
+              getComponentDefaultData(item.type)?.height ||
+              50) /
+              2,
         width:
           widthOfComponent || getComponentDefaultData(item.type)?.width || 100,
         height:

@@ -17,15 +17,13 @@ export default function Wysiwyg() {
   } = useBuilder();
 
   return (
-    <div className=" h-full w-full">
+    <div className=" h-full w-full p-10">
       <div
         ref={containerRef}
         // onMouseEnter={dropMiddle}
-        className={
-          "h-full w-full relative" + (isOver && " border-2 border-blue-500 ")
-        }
+        className={"h-full w-full relative " + (isOver && " ")}
       >
-        <div ref={drop} className={"h-full w-full  relative p-16 "}>
+        <div ref={drop} className={"h-full w-full  relative "}>
           <div
             className={
               "flex-1 h-full bg-white relative border shadow-lg flex items-center justify-center overflow-hidden " +
