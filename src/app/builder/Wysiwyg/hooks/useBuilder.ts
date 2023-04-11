@@ -3,6 +3,7 @@ import { useDrop } from "react-dnd";
 import { v4 } from "uuid";
 import { useComponents } from "@/app/context/ComponentsContext";
 import useComponentDefaultData from "./useComponentDefaultData";
+import { useEditor } from "@/app/context/EditorContext";
 
 export default function useBuilder() {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -15,6 +16,9 @@ export default function useBuilder() {
 
   const { components, setComponents, replace, setReplace } =
     useComponents() as any;
+
+  const { enableSnapping, enableComponentSnapping, enableGridSnapping } =
+    useEditor() as any;
 
   const [{ isOver }, drop] = useDrop({
     accept: "component",
@@ -67,25 +71,77 @@ export default function useBuilder() {
       let hasYSnapped = false;
 
       components?.forEach((component: any) => {
-        if (component.x - x < 10 && component.x - x > -10) {
+        if (
+          component.x - x < 10 &&
+          component.x - x > -10 &&
+          enableComponentSnapping
+        ) {
           x = component.x;
           setXAlignLine(component.x);
           hasXSnapped = true;
         }
-        if (component.y - y < 10 && component.y - y > -10) {
+        if (
+          component.y - y < 10 &&
+          component.y - y > -10 &&
+          enableComponentSnapping
+        ) {
           y = component.y;
           setYAlignLine(component.y);
           hasYSnapped = true;
         }
       });
 
-      if (containerMiddleX - x < 10 && containerMiddleX - x > -10) {
+      if (
+        containerMiddleX -
+          x +
+          (hasXSnapped
+            ? x
+            : x -
+              (widthOfComponent ||
+                getComponentDefaultData(item.type)?.width ||
+                100) /
+                2) <
+          10 &&
+        containerMiddleX -
+          x +
+          (hasXSnapped
+            ? x
+            : x -
+              (widthOfComponent ||
+                getComponentDefaultData(item.type)?.width ||
+                100) /
+                2) >
+          -10 &&
+        enableGridSnapping
+      ) {
         x = containerMiddleX - widthOfComponent / 2;
         setXAlignLine(containerMiddleX);
         hasXSnapped = true;
       }
 
-      if (containerMiddleY - y < 10 && containerMiddleY - y > -10) {
+      if (
+        containerMiddleY -
+          y +
+          (hasYSnapped
+            ? y
+            : y -
+              (heightOfComponent ||
+                getComponentDefaultData(item.type)?.height ||
+                50) /
+                2) <
+          10 &&
+        containerMiddleY -
+          y +
+          (hasYSnapped
+            ? y
+            : y -
+              (heightOfComponent ||
+                getComponentDefaultData(item.type)?.height ||
+                50) /
+                2) >
+          -10 &&
+        enableGridSnapping
+      ) {
         y = containerMiddleY - heightOfComponent / 2;
         setYAlignLine(containerMiddleY);
         hasYSnapped = true;
@@ -119,6 +175,10 @@ export default function useBuilder() {
           widthOfComponent || getComponentDefaultData(item.type)?.width || 100,
         height:
           heightOfComponent || getComponentDefaultData(item.type)?.height || 50,
+        canvasWidth: containerRef.current?.getBoundingClientRect().width || 0,
+        canvasHeight: containerRef.current?.getBoundingClientRect().height || 0,
+        canvasX: containerRef.current?.getBoundingClientRect().x || 0,
+        canvasY: containerRef.current?.getBoundingClientRect().y || 0,
       });
     },
   }) as any;
@@ -145,9 +205,17 @@ export default function useBuilder() {
     }
   };
 
+  const updateComponent = (component: any) => {
+    setComponents([
+      ...components.filter((c: any) => c.id !== component.id),
+      component,
+    ]);
+  };
+
   return {
     components,
     setComponents,
+    updateComponent,
     containerRef,
     draggingComponent,
     setDraggingComponent,

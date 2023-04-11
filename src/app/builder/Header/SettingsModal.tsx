@@ -16,7 +16,14 @@ import { useEditor } from "@/app/context/EditorContext";
 
 export default function SettingsModal({ children }: any) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { enableSnapping, setEnableSnapping } = useEditor() as any;
+  const {
+    enableSnapping,
+    setEnableSnapping,
+    enableComponentSnapping,
+    setEnableComponentSnapping,
+    enableGridSnapping,
+    setEnableGridSnapping,
+  } = useEditor() as any;
 
   return (
     <>
@@ -32,17 +39,26 @@ export default function SettingsModal({ children }: any) {
                 <div className="flex items-center justify-between">
                   <p className="text-lg">Snapping</p>
                   <Switch
-                    value={enableSnapping}
-                    onChange={(e) => setEnableSnapping(e.target.value)}
+                    isChecked={enableSnapping}
+                    onChange={(e) => setEnableSnapping(e.target.checked)}
                   />
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-center justify-between">
                   <p className="pl-4">Component Snapping</p>
                   <Switch
-                    value={enableSnapping}
-                    onChange={(e) => setEnableSnapping(e.target.value)}
+                    isChecked={enableComponentSnapping}
+                    onChange={(e) =>
+                      setEnableComponentSnapping(e.target.checked)
+                    }
                   />
                 </div>
+              </div>
+              <div className="flex items-center justify-between">
+                <p className="pl-4">Grid Snapping</p>
+                <Switch
+                  isChecked={enableGridSnapping}
+                  onChange={(e) => setEnableGridSnapping(e.target.checked)}
+                />
               </div>
             </div>
           </ModalBody>

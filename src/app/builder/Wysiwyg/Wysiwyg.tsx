@@ -7,6 +7,8 @@ import "./Custom.css";
 export default function Wysiwyg() {
   const {
     components,
+    setComponents,
+    updateComponent,
     draggingComponent,
     xAlignLine,
     yAlignLine,
@@ -45,7 +47,10 @@ export default function Wysiwyg() {
 
             <RenderComponent component={draggingComponent} />
             {components?.map((component: any) => (
-              <RenderComponent component={component} />
+              <RenderComponent
+                component={component}
+                updateComponent={updateComponent}
+              />
             ))}
           </div>
         </div>
