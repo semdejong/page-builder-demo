@@ -31,7 +31,7 @@ export default function SettingsModal({ children }: any) {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Editor Settings</ModalHeader>
+          <ModalHeader>Editor Setings</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <div className="w-full h-96 overflow-y-auto">
